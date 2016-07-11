@@ -4,11 +4,6 @@ import numpy as np
 xy = np.loadtxt('train.txt', unpack=True, dtype='float32')
 x_data = np.transpose(xy[0:3])
 y_data = np.transpose(xy[3:])
-# x_data = xy[0:3]
-# y_data = xy[3:]
-
-print x_data
-print y_data
 
 # tf Graph Input
 X = tf.placeholder("float", [None, 3]) # x1, x2 and 1 (for bias)
@@ -18,7 +13,13 @@ Y = tf.placeholder("float", [None, 3]) # A, B, C => 3 classes
 W = tf.Variable(tf.zeros([3, 3]))
 
 # Construct Model
-hypothesis = tf.nn.softmax(tf.matmul(W, X)) # Softmax
+# https://www.tensorflow.org/versions/r0.7/tutorials/mnist/beginnners/index.html
+# First, we multiply x by W with the expression tf.matmul(x, W).
+# This is flipped from when we multiplied them in our equation,
+# where we had Wx, as a small trick to deal with x being
+# a 2D tensor with multiple inputs.
+# We then add b, and finally apply tf.nn.softmax
+hypothesis = tf.nn.softmax(tf.matmul(X, W)) # Softmax
 
 # Minimize error using cross entropy
 learning_rate = 0.001
